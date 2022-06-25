@@ -9,18 +9,18 @@ def lines_count(_file_path):
     return line_count
 
 
-def split_file(_file_path):
+def split_file(_file_path, _ip_numbers):
     file = open(_file_path)
     lines = file.readlines()
 
-    result = ''
+    result = ""
     arr = []
     _i = 0
     n = 1
 
     for line in lines:
-        if _i < n * 1000:
-            result += line.replace('\n', ',')
+        if _i < n * _ip_numbers:
+            result += line.replace("\n", ",")
             _i += 1
         else:
             n += 1
@@ -28,22 +28,28 @@ def split_file(_file_path):
             result = result[:-1]
             arr.append(result)
             result = ''
-            result += line.replace('\n', ',')
+            result += line.replace("\n", ",")
 
+    if result[-1] == ",":
+        result = result[:-1]
+
+    arr.append(result)
     file.close()
     return arr
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     ip_block_file_path = input("Enter path to file with: ")
     line_number = lines_count(ip_block_file_path)
 
     print("Number of IP addresses: " + str(line_number))
 
-    ip_object_name = input('Enter ip-object name: ')
-    mask = 'firewall ip-object add name @' + ip_object_name
+    ip_object_name = input("Enter ip-object name: ")
+    mask = "firewall ip-object add name @" + ip_object_name
 
-    result_arr = split_file(ip_block_file_path)
+    ip_nubmer = int(input("Enter how many ip should be add in one group: "))
+
+    result_arr = split_file(ip_block_file_path, ip_nubmer)
     i = 0
 
     #
