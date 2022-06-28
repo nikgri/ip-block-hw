@@ -1,3 +1,6 @@
+import hashlib
+
+
 def lines_count(_file_path):
     file = open(_file_path)
     line_count = 0
@@ -7,6 +10,25 @@ def lines_count(_file_path):
     file.close()
 
     return line_count
+
+
+def remove_duplicate(_file_path):
+    input_file_path = _file_path
+    output_file_path = "iplist_sort.txt"
+
+    completed_lines_hash = set()
+
+    output_file = open(output_file_path, "w")
+
+    for line in open(input_file_path, "r"):
+        hash_value = hashlib.md5(line.rstrip().encode('utf-8')).hexdigest()
+
+        if hash_value not in completed_lines_hash:
+            output_file.write(line)
+            completed_lines_hash.add(hash_value)
+
+    output_file.close()
+    return output_file_path
 
 
 def split_file(_file_path, _ip_numbers):
@@ -40,9 +62,12 @@ def split_file(_file_path, _ip_numbers):
 
 if __name__ == '__main__':
     ip_block_file_path = input("Enter path to file: ")
+
+    print("Sorting...")
+    ip_block_file_path = remove_duplicate(ip_block_file_path)
     line_number = lines_count(ip_block_file_path)
 
-    print("Number of IP addresses: " + str(line_number))
+    print("Number of unique IP addresses in file: " + str(line_number))
 
     ip_object_name = input("Enter ip-object name: ")
     mask = "firewall ip-object add name @" + ip_object_name
