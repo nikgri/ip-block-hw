@@ -47,9 +47,9 @@ if __name__ == '__main__':
     ip_object_name = input("Enter ip-object name: ")
     mask = "firewall ip-object add name @" + ip_object_name
 
-    ip_nubmer = int(input("Enter how many ip should be add in one group: "))
+    ip_number = int(input("Enter how many ip should be add in one group: "))
 
-    result_arr = split_file(ip_block_file_path, ip_nubmer)
+    result_arr = split_file(ip_block_file_path, ip_number)
     i = 0
 
     #
