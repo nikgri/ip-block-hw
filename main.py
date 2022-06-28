@@ -39,7 +39,7 @@ def split_file(_file_path, _ip_numbers):
 
 
 if __name__ == '__main__':
-    ip_block_file_path = input("Enter path to file with: ")
+    ip_block_file_path = input("Enter path to file: ")
     line_number = lines_count(ip_block_file_path)
 
     print("Number of IP addresses: " + str(line_number))
@@ -47,10 +47,15 @@ if __name__ == '__main__':
     ip_object_name = input("Enter ip-object name: ")
     mask = "firewall ip-object add name @" + ip_object_name
 
+    try:
+        i = int(ip_object_name[-1])
+        mask = mask[:-1]
+    except ValueError:
+        i = 1
+
     ip_number = int(input("Enter how many ip should be add in one group: "))
 
     result_arr = split_file(ip_block_file_path, ip_number)
-    i = 1
 
     #
     # if you need print into console
