@@ -50,7 +50,7 @@ if __name__ == '__main__':
     ip_number = int(input("Enter how many ip should be add in one group: "))
 
     result_arr = split_file(ip_block_file_path, ip_number)
-    i = 0
+    i = 1
 
     #
     # if you need print into console
