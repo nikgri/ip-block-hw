@@ -81,7 +81,7 @@ def write_file(_result_arr, _user_number, _mask):
 
 
 if __name__ == '__main__':
-    ip_block_file_path = input("Enter path to file: ")
+    ip_block_file_path = input(r"Enter path to file: ")
 
     print("Remove duplicate...")
     ip_block_file_path = remove_duplicate(ip_block_file_path)
