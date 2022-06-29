@@ -2,12 +2,8 @@ import hashlib
 
 
 def lines_count(input_file_path):
-    file = open(input_file_path)
-    line_count = 0
-    for line in file:
-        line_count += 1
-
-    file.close()
+    with open(f"{input_file_path}", 'r') as file:
+        line_count = len(file.readlines())
 
     return line_count
 
@@ -76,9 +72,9 @@ def define_number(_ip_object_name):
     return int(_user_number[::-1])
 
 
-def write_file(_user_number, _mask):
+def write_file(_result_arr, _user_number, _mask):
     with open("result.txt", "w") as result_file:
-        for ips in result_arr:
+        for ips in _result_arr:
             firewall_rule = f"{_mask}{_user_number} {ips}\n"
             result_file.write(firewall_rule)
             _user_number += 1
@@ -101,9 +97,11 @@ if __name__ == '__main__':
     result_arr = split_file(ip_block_file_path, ip_number)
 
     user_number = define_number(ip_object_name)
-    mask = mask[:-len(str(user_number))]
+    user_number_length = len(str(user_number))
+    if user_number_length > 1:
+        mask = mask[:-len(str(user_number))]
 
-    write_file(user_number, mask)
+    write_file(result_arr, user_number, mask)
 
     #
     # if you need print into console
