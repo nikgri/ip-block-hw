@@ -1,8 +1,8 @@
 import hashlib
 
 
-def lines_count(_file_path):
-    file = open(_file_path)
+def lines_count(input_file_path):
+    file = open(input_file_path)
     line_count = 0
     for line in file:
         line_count += 1
@@ -12,8 +12,7 @@ def lines_count(_file_path):
     return line_count
 
 
-def remove_duplicate(_file_path):
-    input_file_path = _file_path
+def remove_duplicate(input_file_path):
     output_file_path = "iplist_sort.txt"
 
     completed_lines_hash = set()
@@ -31,8 +30,8 @@ def remove_duplicate(_file_path):
     return output_file_path
 
 
-def split_file(_file_path, _ip_numbers):
-    file = open(_file_path)
+def split_file(input_file_path, _ip_numbers):
+    file = open(input_file_path)
     lines = file.readlines()
 
     result = ""
@@ -62,27 +61,49 @@ def split_file(_file_path, _ip_numbers):
     return arr
 
 
+def define_number(_ip_object_name):
+    _user_number = ""
+
+    for i in range(-1, -len(_ip_object_name), -1):
+        try:
+            last_digit = int(_ip_object_name[i])
+            _user_number += str(last_digit)
+        except ValueError:
+            if i == -1:
+                _user_number += "1"
+            break
+
+    return int(_user_number[::-1])
+
+
+def write_file(_user_number, _mask):
+    with open("result.txt", "w") as result_file:
+        for ips in result_arr:
+            firewall_rule = f"{_mask}{_user_number} {ips}\n"
+            result_file.write(firewall_rule)
+            _user_number += 1
+
+
 if __name__ == '__main__':
     ip_block_file_path = input("Enter path to file: ")
 
     print("Remove duplicate...")
     ip_block_file_path = remove_duplicate(ip_block_file_path)
-    line_number = lines_count(ip_block_file_path)
+    lines_number = lines_count(ip_block_file_path)
 
-    print("Number of unique IP addresses in file: " + str(line_number))
+    print(f"Number of unique IP addresses in file: {lines_number}")
 
     ip_object_name = input("Enter ip-object name: ")
-    mask = "firewall ip-object add name @" + ip_object_name
-
-    try:
-        i = int(ip_object_name[-1])
-        mask = mask[:-1]
-    except ValueError:
-        i = 1
+    mask = f"firewall ip-object add name @{ip_object_name}"
 
     ip_number = int(input("Enter how many ip should be add in one group: "))
 
     result_arr = split_file(ip_block_file_path, ip_number)
+
+    user_number = define_number(ip_object_name)
+    mask = mask[:-len(str(user_number))]
+
+    write_file(user_number, mask)
 
     #
     # if you need print into console
@@ -91,8 +112,3 @@ if __name__ == '__main__':
     #     print(mask + str(i) + ' ' + ips)
     #     i += 1
     #
-
-    with open("result.txt", "w") as result_file:
-        for ips in result_arr:
-            result_file.write(mask + str(i) + ' ' + ips + '\n')
-            i += 1
