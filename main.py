@@ -42,7 +42,8 @@ def split_file(_file_path, _ip_numbers):
 
     for line in lines:
         if _i < n * _ip_numbers:
-            result += line.replace("\n", ",")
+            line = line.strip() + ","
+            result += line
             _i += 1
         else:
             n += 1
@@ -50,7 +51,8 @@ def split_file(_file_path, _ip_numbers):
             result = result[:-1]
             arr.append(result)
             result = ''
-            result += line.replace("\n", ",")
+            line = line.strip() + ","
+            result += line
 
     if result[-1] == ",":
         result = result[:-1]
@@ -63,7 +65,7 @@ def split_file(_file_path, _ip_numbers):
 if __name__ == '__main__':
     ip_block_file_path = input("Enter path to file: ")
 
-    print("Sorting...")
+    print("Remove duplicate...")
     ip_block_file_path = remove_duplicate(ip_block_file_path)
     line_number = lines_count(ip_block_file_path)
 
