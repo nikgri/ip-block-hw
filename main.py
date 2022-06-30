@@ -1,11 +1,5 @@
 import hashlib
-
-
-def lines_count(input_file_path):
-    with open(f"{input_file_path}", 'r') as file:
-        line_count = len(file.readlines())
-
-    return line_count
+import re
 
 
 def remove_duplicate(input_file_path):
@@ -16,14 +10,24 @@ def remove_duplicate(input_file_path):
     output_file = open(output_file_path, "w")
 
     for line in open(input_file_path, "r"):
-        hash_value = hashlib.md5(line.rstrip().encode('utf-8')).hexdigest()
+        matches = re.findall(r'\d+\.\d+\.\d+\.\d+', line)
+        if len(matches) > 0:
+            for ip in matches:
+                hash_value = hashlib.md5(ip.rstrip().encode('utf-8')).hexdigest()
 
-        if hash_value not in completed_lines_hash:
-            output_file.write(line)
-            completed_lines_hash.add(hash_value)
+                if hash_value not in completed_lines_hash:
+                    output_file.write(f"{ip}\n")
+                    completed_lines_hash.add(hash_value)
 
     output_file.close()
     return output_file_path
+
+
+def lines_count(input_file_path):
+    with open(f"{input_file_path}", 'r') as file:
+        line_count = len(file.readlines())
+
+    return line_count
 
 
 def split_file(input_file_path, _ip_numbers):
@@ -97,8 +101,7 @@ if __name__ == '__main__':
     result_arr = split_file(ip_block_file_path, ip_number)
 
     user_number = define_number(ip_object_name)
-    user_number_length = len(str(user_number))
-    if user_number_length > 1:
+    if user_number != 1:
         mask = mask[:-len(str(user_number))]
 
     write_file(result_arr, user_number, mask)
